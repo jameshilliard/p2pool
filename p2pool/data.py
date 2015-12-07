@@ -53,16 +53,14 @@ def load_share(share, net, peer_addr):
         raise p2p.PeerMisbehavingError('sent an obsolete share')
     elif share['type'] == Share.VERSION:
         return Share(net, peer_addr, Share.share_type.unpack(share['contents']))
-    elif share['type'] == NewShare.VERSION:
-        return NewShare(net, peer_addr, NewShare.share_type.unpack(share['contents']))
     else:
         raise ValueError('unknown share type: %r' % (share['type'],))
 
 DONATION_SCRIPT = '4104ffd03de44a6e11b9917f3a29f9443283d9871c9d743ef30d5eddcd37094b64d1b3d8090496b53256786bf5c82932ec23c3b74d9f05a6f95a8b5529352656664bac'.decode('hex')
 
-class NewShare(object):
-    VERSION = 15
-    VOTING_VERSION = 15
+class Share(object):
+    VERSION = 14
+    VOTING_VERSION = 14
     SUCCESSOR = None
     
     small_block_header_type = pack.ComposedType([
@@ -383,7 +381,7 @@ class NewShare(object):
 class Share(object):
     VERSION = 14
     VOTING_VERSION = 14
-    SUCCESSOR = NewShare
+    SUCCESSOR = None
     
     small_block_header_type = pack.ComposedType([
         ('version', pack.VarIntType()),
